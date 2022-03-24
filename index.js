@@ -5,6 +5,8 @@ const mapContext = map.getContext("2d");
 
 const img = document.getElementById("main_image");
 
+const graph = document.getElementById("graph");
+
 img.addEventListener("load", () => mapContext.drawImage(img, 0, 0, img.width, img.height, 0, 0, map.width, map.height));
 
 requestAnimationFrame(drawCanvas); 
@@ -99,7 +101,9 @@ function mouseWheelEvent(event) {
     event.preventDefault();
 }
 
-function showDetails({x, y})
+async function showDetails({ x, y })
 {
-    console.log(view.toWorld(x, y));
+  view.toWorld(x, y);
+  const svg = await fetch('plt.svg').then(r => r.text());
+  graph.innerHTML = svg;
 }
