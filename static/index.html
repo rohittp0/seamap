@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sea Map</title>
+
+    <script src="index.js" defer></script>
+</head>
+
+<body>
+    Month <input type="number" min="1" max="12" step="1" id="time" value="1">
+    Depth <input type="number" min="1" max="57" step="1" id="depth" value="1">
+    <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+        <img alt="Loading..." hidden id="main_image">
+        <canvas id="main_canvas" width="1000" height="500" style="border: red solid 2px;"></canvas>
+        <br>
+        <div id="graph"></div>
+    </div>
+</body>
+
+</html>

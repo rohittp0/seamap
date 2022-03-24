@@ -2,9 +2,9 @@ import io
 import textwrap
 
 import matplotlib.pyplot as plt
-import xarray as xr
+import pandas as pd
 
-data_raw = xr.open_dataset("data/woa_salt.nc", decode_times=False)
+SCALE = 2
 
 def _get_units_from_attrs(da):
     """Extracts and formats the unit/units from a attributes."""
@@ -70,10 +70,20 @@ def plot(darray):
     return f.getvalue()
 
 
-def get_plot(lat, lon, time):
-    to_plot = data_raw.get("s_an").isel(lat=lat, lon=lon, time=time).squeeze()
+def get_plot(data_raw, type, lat, lon, time=None):
 
-    if "time" in to_plot:
-        del to_plot["time"]
+    lat = round(lat / SCALE)
+    lon = round(lon / SCALE)
 
-    print(plot(to_plot))
+    print(lat, lon)
+
+    if len(data_raw.get(type).shape) == 4:
+        to_plot = data_raw.get(type).isel(lat=[lat], lon=[lon], time=[time])
+    else:
+        to_plot = data_raw.get(type).isel(lat=[lat], lon=[lon])
+
+    units, ref_time = to_plot.time.attrs['units'].split('since')
+    to_plot['time'] = pd.date_range(
+        start=ref_time, periods=to_plot.sizes['time'], freq='MS')
+
+    return plot(to_plot.squeeze())
